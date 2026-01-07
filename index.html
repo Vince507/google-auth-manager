@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Auth Manager | Google 授权应用管理器</title>
-    <meta name="description" content="Extract and backup your Google-authorized apps. 提取并备份您的Google授权应用。">
+    <title>Google Auth Manager</title>
+    <meta name="description" content="Extract and backup your Google-authorized apps">
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
         rel="stylesheet">
@@ -77,9 +77,6 @@
         section h2 {
             font-size: 1rem;
             margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .instructions {
@@ -313,7 +310,7 @@
 </head>
 
 <body>
-    <a href="https://github.com" target="_blank" class="github-link" id="githubLink">
+    <a href="https://github.com/cocojojo5213/google-auth-manager" target="_blank" class="github-link">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
             <path
                 d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -323,39 +320,38 @@
 
     <div class="lang-switch">
         <button class="lang-btn active" onclick="setLang('zh')">中文</button>
-        <button class="lang-btn" onclick="setLang('en')">English</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
     </div>
 
     <div class="container">
         <header>
-            <h1>🔐 <span data-i18n="title">Google 授权应用管理器</span></h1>
-            <p><span data-i18n="subtitle">提取应用列表 → 一键跳转到各服务设置备用登录方式</span> <span class="db-count" id="dbCount"></span>
-            </p>
+            <h1><span data-i18n="title">Google 授权应用管理器</span></h1>
+            <p><span data-i18n="subtitle">提取应用列表，跳转到各服务设置备用登录</span> <span class="db-count" id="dbCount"></span></p>
         </header>
 
         <section>
-            <h2>📋 <span data-i18n="step1Title">第一步：获取应用列表</span></h2>
+            <h2 data-i18n="step1Title">第一步：获取应用列表</h2>
             <div class="instructions">
                 <p><strong data-i18n="howTo">操作方法：</strong></p>
                 <ol>
                     <li><span data-i18n="step1">点击</span> <a href="https://myaccount.google.com/connections"
                             target="_blank" data-i18n="openGoogle">打开 Google 权限页面</a></li>
-                    <li><span data-i18n="step2">在页面上按</span> <strong>Ctrl+A</strong> <span
-                            data-i18n="selectAll">（全选）</span>，<span data-i18n="then">再按</span> <strong>Ctrl+C</strong>
-                        <span data-i18n="copy">（复制）</span></li>
-                    <li data-i18n="step3">在下方粘贴，点击"解析"</li>
+                    <li><span data-i18n="step2">按</span> <strong>Ctrl+A</strong> <span
+                            data-i18n="selectAll">全选</span>，<span data-i18n="then">再按</span> <strong>Ctrl+C</strong>
+                        <span data-i18n="copy">复制</span></li>
+                    <li data-i18n="step3">粘贴到下方，点击"解析"</li>
                 </ol>
             </div>
             <textarea id="inputArea" data-i18n-placeholder="placeholder"></textarea>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <button class="btn" onclick="parseInput()">🔍 <span data-i18n="parseBtn">解析应用列表</span></button>
+                <button class="btn" onclick="parseInput()" data-i18n="parseBtn">解析应用列表</button>
                 <a href="https://myaccount.google.com/connections" target="_blank" class="btn btn-secondary"><span
-                        data-i18n="openGoogleBtn">打开 Google 权限页面</span> →</a>
+                        data-i18n="openGoogleBtn">打开 Google 权限页面</span></a>
             </div>
         </section>
 
         <section id="resultsSection" class="hidden">
-            <h2>📊 <span data-i18n="resultsTitle">应用列表 - 点击链接设置备用登录</span></h2>
+            <h2 data-i18n="resultsTitle">应用列表 - 点击链接设置备用登录</h2>
             <div class="summary-bar">
                 <div class="summary-item">
                     <div class="num" id="totalCount">0</div>
@@ -363,11 +359,11 @@
                 </div>
                 <div class="summary-item">
                     <div class="num" id="matchedCount">0</div>
-                    <div class="label" data-i18n="matched">已匹配URL</div>
+                    <div class="label" data-i18n="matched">已匹配</div>
                 </div>
                 <div class="summary-item">
                     <div class="num" id="unmatchedCount">0</div>
-                    <div class="label" data-i18n="unmatched">需手动查找</div>
+                    <div class="label" data-i18n="unmatched">未匹配</div>
                 </div>
             </div>
             <div style="overflow-x: auto;">
@@ -376,21 +372,20 @@
                         <tr>
                             <th style="width:30%" data-i18n="appName">应用名称</th>
                             <th style="width:15%" data-i18n="status">状态</th>
-                            <th data-i18n="quickLinks">快捷链接（点击直接跳转）</th>
+                            <th data-i18n="quickLinks">快捷链接</th>
                         </tr>
                     </thead>
                     <tbody id="resultsBody"></tbody>
                 </table>
             </div>
             <div class="actions-bar">
-                <button class="btn" onclick="downloadBackup()">📥 <span data-i18n="downloadBtn">下载备份</span></button>
-                <button class="btn btn-secondary" onclick="copyAsText()">📋 <span
-                        data-i18n="copyBtn">复制为文本</span></button>
+                <button class="btn" onclick="downloadBackup()" data-i18n="downloadBtn">下载备份</button>
+                <button class="btn btn-secondary" onclick="copyAsText()" data-i18n="copyBtn">复制为文本</button>
             </div>
         </section>
 
         <section>
-            <h2>➕ <span data-i18n="addTitle">手动添加应用</span></h2>
+            <h2 data-i18n="addTitle">手动添加应用</h2>
             <p style="font-size:0.85rem; color:#666; margin-bottom:12px;" data-i18n="addDesc">如果有遗漏的应用，可以手动添加：</p>
             <div class="add-form">
                 <input type="text" id="manualAppName" data-i18n-placeholder="addPlaceholder">
@@ -399,93 +394,92 @@
         </section>
 
         <footer>
-            <p>💡 <span data-i18n="tip">提示：为每个重要服务设置邮箱+密码登录，即使Google账号丢失也能访问</span></p>
+            <p data-i18n="tip">建议为重要服务设置邮箱+密码登录，防止 Google 账号丢失后无法访问</p>
         </footer>
     </div>
 
     <script src="database.js"></script>
     <script>
-        // 多语言支持
         const i18n = {
             zh: {
                 title: 'Google 授权应用管理器',
-                subtitle: '提取应用列表 → 一键跳转到各服务设置备用登录方式',
+                subtitle: '提取应用列表，跳转到各服务设置备用登录',
                 dbCount: '已收录 {count} 个服务',
                 step1Title: '第一步：获取应用列表',
                 howTo: '操作方法：',
                 step1: '点击',
                 openGoogle: '打开 Google 权限页面',
-                step2: '在页面上按',
-                selectAll: '（全选）',
+                step2: '按',
+                selectAll: '全选',
                 then: '再按',
-                copy: '（复制）',
-                step3: '在下方粘贴，点击"解析"',
+                copy: '复制',
+                step3: '粘贴到下方，点击"解析"',
                 placeholder: '粘贴 Google 权限页面内容...',
                 parseBtn: '解析应用列表',
                 openGoogleBtn: '打开 Google 权限页面',
                 resultsTitle: '应用列表 - 点击链接设置备用登录',
                 recognized: '识别的应用',
-                matched: '已匹配URL',
-                unmatched: '需手动查找',
+                matched: '已匹配',
+                unmatched: '未匹配',
                 appName: '应用名称',
                 status: '状态',
-                quickLinks: '快捷链接（点击直接跳转）',
+                quickLinks: '快捷链接',
                 downloadBtn: '下载备份',
                 copyBtn: '复制为文本',
                 addTitle: '手动添加应用',
                 addDesc: '如果有遗漏的应用，可以手动添加：',
-                addPlaceholder: '应用名称（如 Notion）',
+                addPlaceholder: '应用名称',
                 addBtn: '添加',
-                tip: '提示：为每个重要服务设置邮箱+密码登录，即使Google账号丢失也能访问',
+                tip: '建议为重要服务设置邮箱+密码登录，防止 Google 账号丢失后无法访问',
                 login: '登录',
-                settings: '账号设置',
-                security: '安全设置',
-                search: '🔍 搜索设置页面',
-                matchedTag: '✓ 已匹配',
+                settings: '设置',
+                security: '安全',
+                search: '搜索',
+                matchedTag: '已匹配',
                 unmatchedTag: '未匹配',
-                copied: '已复制到剪贴板！',
-                exists: '该应用已在列表中',
-                noInput: '请先粘贴 Google 权限页面的内容'
+                copied: '已复制',
+                exists: '已在列表中',
+                noInput: '请先粘贴内容'
             },
             en: {
                 title: 'Google Auth Manager',
-                subtitle: 'Extract apps → Jump to each service to set backup login',
-                dbCount: '{count} services included',
+                subtitle: 'Extract apps, jump to each service to set backup login',
+                dbCount: '{count} services',
                 step1Title: 'Step 1: Get App List',
                 howTo: 'How to:',
                 step1: 'Click',
-                openGoogle: 'Open Google Permissions Page',
+                openGoogle: 'Open Google Permissions',
                 step2: 'Press',
-                selectAll: '(Select All)',
+                selectAll: 'select all',
                 then: 'then',
-                copy: '(Copy)',
+                copy: 'copy',
                 step3: 'Paste below, click "Parse"',
                 placeholder: 'Paste Google permissions page content...',
                 parseBtn: 'Parse App List',
                 openGoogleBtn: 'Open Google Permissions',
                 resultsTitle: 'App List - Click links to set backup login',
                 recognized: 'Recognized',
-                matched: 'URL Matched',
-                unmatched: 'Manual Search',
+                matched: 'Matched',
+                unmatched: 'Unmatched',
                 appName: 'App Name',
                 status: 'Status',
-                quickLinks: 'Quick Links (Click to jump)',
+                quickLinks: 'Quick Links',
                 downloadBtn: 'Download Backup',
                 copyBtn: 'Copy as Text',
                 addTitle: 'Add App Manually',
                 addDesc: 'If any app is missing, add it manually:',
-                addPlaceholder: 'App name (e.g. Notion)',
+                addPlaceholder: 'App name',
                 addBtn: 'Add',
-                tip: 'Tip: Set email+password login for important services in case Google account is lost',
+                tip: 'Set email+password login for important services in case Google account is lost',
                 login: 'Login',
                 settings: 'Settings',
                 security: 'Security',
-                search: '🔍 Search settings',
-                matchedTag: '✓ Matched',
+                search: 'Search',
+                matchedTag: 'Matched',
                 unmatchedTag: 'Not found',
-                copied: 'Copied to clipboard!',
-                exists: 'This app is already in the list',
-                noInput: 'Please paste Google permissions page content first'
+                copied: 'Copied',
+                exists: 'Already in list',
+                noInput: 'Paste content first'
             }
         };
 
@@ -512,7 +506,6 @@
 
         function t(key) { return i18n[currentLang][key] || key; }
 
-        // 初始化
         setLang('zh');
 
         function parseInput() {
@@ -573,7 +566,7 @@
                     if (m.settings) links += `<a href="${m.settings}" target="_blank" class="link-btn settings">${t('settings')}</a>`;
                     if (m.security) links += `<a href="${m.security}" target="_blank" class="link-btn security">${t('security')}</a>`;
                 } else {
-                    const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(app.name + ' account settings login')}`;
+                    const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(app.name + ' account settings')}`;
                     links = `<a href="${searchUrl}" target="_blank" class="link-btn disabled">${t('search')}</a>`;
                 }
                 return `<tr><td class="app-name">${escapeHtml(app.name)}</td><td>${m ? `<span class="status-tag found">${t('matchedTag')}</span>` : `<span class="status-tag not-found">${t('unmatchedTag')}</span>`}</td><td>${links}</td></tr>`;
@@ -592,17 +585,15 @@
         }
 
         function downloadBackup() {
-            const data = { exportedAt: new Date().toISOString(), language: currentLang, apps: parsedApps.map(a => ({ name: a.name, loginUrl: a.matched?.login || null, settingsUrl: a.matched?.settings || null, securityUrl: a.matched?.security || null })) };
+            const data = { exportedAt: new Date().toISOString(), apps: parsedApps.map(a => ({ name: a.name, login: a.matched?.login || null, settings: a.matched?.settings || null, security: a.matched?.security || null })) };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `google-apps-backup-${new Date().toISOString().slice(0, 10)}.json`; a.click();
+            const a = document.createElement('a'); a.href = url; a.download = `google-apps-${new Date().toISOString().slice(0, 10)}.json`; a.click();
             URL.revokeObjectURL(url);
         }
 
         function copyAsText() {
-            let text = currentLang === 'zh' ?
-                `Google 授权应用备份 - ${new Date().toLocaleDateString()}\n\n` :
-                `Google Auth Apps Backup - ${new Date().toLocaleDateString()}\n\n`;
+            let text = `Google Apps Backup - ${new Date().toLocaleDateString()}\n\n`;
             parsedApps.forEach((app, i) => {
                 text += `${i + 1}. ${app.name}\n`;
                 if (app.matched) {
