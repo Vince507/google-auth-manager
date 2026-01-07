@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Auth Manager | Google 授权应用管理器</title>
+    <meta name="description" content="Extract and backup your Google-authorized apps. 提取并备份您的Google授权应用。">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .lang-btn.active {
+            background: #4285f4;
+            color: white;
+            border-color: #4285f4;
+        }
+
+        section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        section h2 {
+            font-size: 1rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instructions {
+            background: #e3f2fd;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .instructions p {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            font-size: 0.85rem;
+        }
+
+        .instructions li {
+            margin-bottom: 4px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #4285f4;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #3367d6;
+        }
+
+        .btn-secondary {
+            background: #5f6368;
+        }
+
+        .btn-secondary:hover {
+            background: #4a4e51;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 12px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            resize: vertical;
+            margin-bottom: 12px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4285f4;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .results-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 500;
+        }
+
+        .results-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .results-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .app-name {
+            font-weight: 500;
+        }
+
+        .link-btn {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        .link-btn.primary {
+            background: #4285f4;
+            color: white;
+        }
+
+        .link-btn.settings {
+            background: #34a853;
+            color: white;
+        }
+
+        .link-btn.security {
+            background: #ea4335;
+            color: white;
+        }
+
+        .link-btn.disabled {
+            background: #e9ecef;
+            color: #999;
+        }
+
+        .link-btn:hover:not(.disabled) {
+            opacity: 0.9;
+        }
+
+        .status-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .status-tag.found {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-tag.not-found {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .summary-bar {
+            display: flex;
+            gap: 20px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .summary-item {
+            text-align: center;
+        }
+
+        .summary-item .num {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4285f4;
+        }
+
+        .summary-item .label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .actions-bar {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+        .add-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .add-form input {
+            flex: 1;
+            min-width: 150px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .add-form input:focus {
+            outline: none;
+            border-color: #4285f4;
+        }
+
+        .db-count {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+        }
+
+        .github-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .github-link:hover {
+            color: #4285f4;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="https://github.com" target="_blank" class="github-link" id="githubLink">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+        </svg>
+        <span>GitHub</span>
+    </a>
+
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('zh')">中文</button>
+        <button class="lang-btn" onclick="setLang('en')">English</button>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>🔐 <span data-i18n="title">Google 授权应用管理器</span></h1>
+            <p><span data-i18n="subtitle">提取应用列表 → 一键跳转到各服务设置备用登录方式</span> <span class="db-count" id="dbCount"></span>
+            </p>
+        </header>
+
+        <section>
+            <h2>📋 <span data-i18n="step1Title">第一步：获取应用列表</span></h2>
+            <div class="instructions">
+                <p><strong data-i18n="howTo">操作方法：</strong></p>
+                <ol>
+                    <li><span data-i18n="step1">点击</span> <a href="https://myaccount.google.com/connections"
+                            target="_blank" data-i18n="openGoogle">打开 Google 权限页面</a></li>
+                    <li><span data-i18n="step2">在页面上按</span> <strong>Ctrl+A</strong> <span
+                            data-i18n="selectAll">（全选）</span>，<span data-i18n="then">再按</span> <strong>Ctrl+C</strong>
+                        <span data-i18n="copy">（复制）</span></li>
+                    <li data-i18n="step3">在下方粘贴，点击"解析"</li>
+                </ol>
+            </div>
+            <textarea id="inputArea" data-i18n-placeholder="placeholder"></textarea>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="btn" onclick="parseInput()">🔍 <span data-i18n="parseBtn">解析应用列表</span></button>
+                <a href="https://myaccount.google.com/connections" target="_blank" class="btn btn-secondary"><span
+                        data-i18n="openGoogleBtn">打开 Google 权限页面</span> →</a>
+            </div>
+        </section>
+
+        <section id="resultsSection" class="hidden">
+            <h2>📊 <span data-i18n="resultsTitle">应用列表 - 点击链接设置备用登录</span></h2>
+            <div class="summary-bar">
+                <div class="summary-item">
+                    <div class="num" id="totalCount">0</div>
+                    <div class="label" data-i18n="recognized">识别的应用</div>
+                </div>
+                <div class="summary-item">
+                    <div class="num" id="matchedCount">0</div>
+                    <div class="label" data-i18n="matched">已匹配URL</div>
+                </div>
+                <div class="summary-item">
+                    <div class="num" id="unmatchedCount">0</div>
+                    <div class="label" data-i18n="unmatched">需手动查找</div>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th style="width:30%" data-i18n="appName">应用名称</th>
+                            <th style="width:15%" data-i18n="status">状态</th>
+                            <th data-i18n="quickLinks">快捷链接（点击直接跳转）</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody"></tbody>
+                </table>
+            </div>
+            <div class="actions-bar">
+                <button class="btn" onclick="downloadBackup()">📥 <span data-i18n="downloadBtn">下载备份</span></button>
+                <button class="btn btn-secondary" onclick="copyAsText()">📋 <span
+                        data-i18n="copyBtn">复制为文本</span></button>
+            </div>
+        </section>
+
+        <section>
+            <h2>➕ <span data-i18n="addTitle">手动添加应用</span></h2>
+            <p style="font-size:0.85rem; color:#666; margin-bottom:12px;" data-i18n="addDesc">如果有遗漏的应用，可以手动添加：</p>
+            <div class="add-form">
+                <input type="text" id="manualAppName" data-i18n-placeholder="addPlaceholder">
+                <button class="btn" onclick="addManualApp()" data-i18n="addBtn">添加</button>
+            </div>
+        </section>
+
+        <footer>
+            <p>💡 <span data-i18n="tip">提示：为每个重要服务设置邮箱+密码登录，即使Google账号丢失也能访问</span></p>
+        </footer>
+    </div>
+
+    <script src="database.js"></script>
+    <script>
+        // 多语言支持
+        const i18n = {
+            zh: {
+                title: 'Google 授权应用管理器',
+                subtitle: '提取应用列表 → 一键跳转到各服务设置备用登录方式',
+                dbCount: '已收录 {count} 个服务',
+                step1Title: '第一步：获取应用列表',
+                howTo: '操作方法：',
+                step1: '点击',
+                openGoogle: '打开 Google 权限页面',
+                step2: '在页面上按',
+                selectAll: '（全选）',
+                then: '再按',
+                copy: '（复制）',
+                step3: '在下方粘贴，点击"解析"',
+                placeholder: '粘贴 Google 权限页面内容...',
+                parseBtn: '解析应用列表',
+                openGoogleBtn: '打开 Google 权限页面',
+                resultsTitle: '应用列表 - 点击链接设置备用登录',
+                recognized: '识别的应用',
+                matched: '已匹配URL',
+                unmatched: '需手动查找',
+                appName: '应用名称',
+                status: '状态',
+                quickLinks: '快捷链接（点击直接跳转）',
+                downloadBtn: '下载备份',
+                copyBtn: '复制为文本',
+                addTitle: '手动添加应用',
+                addDesc: '如果有遗漏的应用，可以手动添加：',
+                addPlaceholder: '应用名称（如 Notion）',
+                addBtn: '添加',
+                tip: '提示：为每个重要服务设置邮箱+密码登录，即使Google账号丢失也能访问',
+                login: '登录',
+                settings: '账号设置',
+                security: '安全设置',
+                search: '🔍 搜索设置页面',
+                matchedTag: '✓ 已匹配',
+                unmatchedTag: '未匹配',
+                copied: '已复制到剪贴板！',
+                exists: '该应用已在列表中',
+                noInput: '请先粘贴 Google 权限页面的内容'
+            },
+            en: {
+                title: 'Google Auth Manager',
+                subtitle: 'Extract apps → Jump to each service to set backup login',
+                dbCount: '{count} services included',
+                step1Title: 'Step 1: Get App List',
+                howTo: 'How to:',
+                step1: 'Click',
+                openGoogle: 'Open Google Permissions Page',
+                step2: 'Press',
+                selectAll: '(Select All)',
+                then: 'then',
+                copy: '(Copy)',
+                step3: 'Paste below, click "Parse"',
+                placeholder: 'Paste Google permissions page content...',
+                parseBtn: 'Parse App List',
+                openGoogleBtn: 'Open Google Permissions',
+                resultsTitle: 'App List - Click links to set backup login',
+                recognized: 'Recognized',
+                matched: 'URL Matched',
+                unmatched: 'Manual Search',
+                appName: 'App Name',
+                status: 'Status',
+                quickLinks: 'Quick Links (Click to jump)',
+                downloadBtn: 'Download Backup',
+                copyBtn: 'Copy as Text',
+                addTitle: 'Add App Manually',
+                addDesc: 'If any app is missing, add it manually:',
+                addPlaceholder: 'App name (e.g. Notion)',
+                addBtn: 'Add',
+                tip: 'Tip: Set email+password login for important services in case Google account is lost',
+                login: 'Login',
+                settings: 'Settings',
+                security: 'Security',
+                search: '🔍 Search settings',
+                matchedTag: '✓ Matched',
+                unmatchedTag: 'Not found',
+                copied: 'Copied to clipboard!',
+                exists: 'This app is already in the list',
+                noInput: 'Please paste Google permissions page content first'
+            }
+        };
+
+        let currentLang = 'zh';
+        let parsedApps = [];
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.textContent = i18n[lang][key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (i18n[lang][key]) el.placeholder = i18n[lang][key];
+            });
+
+            document.getElementById('dbCount').textContent = i18n[lang].dbCount.replace('{count}', Object.keys(APP_DATABASE).length);
+            if (parsedApps.length > 0) displayResults();
+        }
+
+        function t(key) { return i18n[currentLang][key] || key; }
+
+        // 初始化
+        setLang('zh');
+
+        function parseInput() {
+            const input = document.getElementById('inputArea').value.trim();
+            if (!input) { alert(t('noInput')); return; }
+            parsedApps = extractApps(input);
+            displayResults();
+        }
+
+        function extractApps(text) {
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+            const apps = [];
+            const excludeKeywords = ['google', '账号', '帮助', '返回', '主要内容', '第三方', '数据', '了解详情', '共', '款应用', '过滤', 'search', 'info', '已使用', '有权访问', '移除', '关联了', '隐私权', '条款', '关于', 'arrow', 'done', '登录', '权限', '跳至', '跟踪', '共享', 'filter', '服务', '选择', '设置', '安全', '更多', '显示', '隐藏', '展开', '收起', 'account', 'help', 'back', 'apps', 'permissions', 'privacy', 'terms', 'about'];
+
+            for (const line of lines) {
+                if (line.length < 2 || line.length > 80) continue;
+                if (/^[\d\s\(\)\[\]（）]+$/.test(line)) continue;
+                if (/^[a-z_]+$/.test(line)) continue;
+                const lowerLine = line.toLowerCase();
+                if (excludeKeywords.some(kw => lowerLine.includes(kw.toLowerCase()))) continue;
+                if (!apps.some(a => a.name.toLowerCase() === line.toLowerCase())) {
+                    apps.push({ name: line, matched: matchApp(line) });
+                }
+            }
+            return apps;
+        }
+
+        function matchApp(name) {
+            const lowerName = name.toLowerCase();
+            for (const [key, data] of Object.entries(APP_DATABASE)) {
+                if (lowerName.includes(key) || key.includes(lowerName.replace(/\s+/g, ''))) return data;
+            }
+            const words = lowerName.split(/[\s&\-]+/);
+            for (const word of words) {
+                if (word.length < 3) continue;
+                for (const [key, data] of Object.entries(APP_DATABASE)) {
+                    if (key.includes(word) || data.name.toLowerCase().includes(word)) return data;
+                }
+            }
+            return null;
+        }
+
+        function displayResults() {
+            const section = document.getElementById('resultsSection');
+            section.classList.remove('hidden');
+            const matched = parsedApps.filter(a => a.matched);
+            const unmatched = parsedApps.filter(a => !a.matched);
+            document.getElementById('totalCount').textContent = parsedApps.length;
+            document.getElementById('matchedCount').textContent = matched.length;
+            document.getElementById('unmatchedCount').textContent = unmatched.length;
+
+            const tbody = document.getElementById('resultsBody');
+            tbody.innerHTML = parsedApps.map(app => {
+                const m = app.matched;
+                let links = '';
+                if (m) {
+                    if (m.login) links += `<a href="${m.login}" target="_blank" class="link-btn primary">${t('login')}</a>`;
+                    if (m.settings) links += `<a href="${m.settings}" target="_blank" class="link-btn settings">${t('settings')}</a>`;
+                    if (m.security) links += `<a href="${m.security}" target="_blank" class="link-btn security">${t('security')}</a>`;
+                } else {
+                    const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(app.name + ' account settings login')}`;
+                    links = `<a href="${searchUrl}" target="_blank" class="link-btn disabled">${t('search')}</a>`;
+                }
+                return `<tr><td class="app-name">${escapeHtml(app.name)}</td><td>${m ? `<span class="status-tag found">${t('matchedTag')}</span>` : `<span class="status-tag not-found">${t('unmatchedTag')}</span>`}</td><td>${links}</td></tr>`;
+            }).join('');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function addManualApp() {
+            const input = document.getElementById('manualAppName');
+            const name = input.value.trim();
+            if (!name) return;
+            if (parsedApps.some(a => a.name.toLowerCase() === name.toLowerCase())) { alert(t('exists')); return; }
+            parsedApps.push({ name: name, matched: matchApp(name) });
+            input.value = '';
+            displayResults();
+        }
+
+        function downloadBackup() {
+            const data = { exportedAt: new Date().toISOString(), language: currentLang, apps: parsedApps.map(a => ({ name: a.name, loginUrl: a.matched?.login || null, settingsUrl: a.matched?.settings || null, securityUrl: a.matched?.security || null })) };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = `google-apps-backup-${new Date().toISOString().slice(0, 10)}.json`; a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function copyAsText() {
+            let text = currentLang === 'zh' ?
+                `Google 授权应用备份 - ${new Date().toLocaleDateString()}\n\n` :
+                `Google Auth Apps Backup - ${new Date().toLocaleDateString()}\n\n`;
+            parsedApps.forEach((app, i) => {
+                text += `${i + 1}. ${app.name}\n`;
+                if (app.matched) {
+                    if (app.matched.login) text += `   ${t('login')}: ${app.matched.login}\n`;
+                    if (app.matched.settings) text += `   ${t('settings')}: ${app.matched.settings}\n`;
+                    if (app.matched.security) text += `   ${t('security')}: ${app.matched.security}\n`;
+                }
+                text += '\n';
+            });
+            navigator.clipboard.writeText(text).then(() => alert(t('copied')));
+        }
+
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+    </script>
+</body>
+
+</html>
