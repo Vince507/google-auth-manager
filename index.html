@@ -338,7 +338,8 @@
                             target="_blank" data-i18n="openGoogle">打开 Google 权限页面</a></li>
                     <li><span data-i18n="step2">按</span> <strong>Ctrl+A</strong> <span
                             data-i18n="selectAll">全选</span>，<span data-i18n="then">再按</span> <strong>Ctrl+C</strong>
-                        <span data-i18n="copy">复制</span></li>
+                        <span data-i18n="copy">复制</span>
+                    </li>
                     <li data-i18n="step3">粘贴到下方，点击"解析"</li>
                 </ol>
             </div>
@@ -535,14 +536,35 @@
 
         function matchApp(name) {
             const lowerName = name.toLowerCase();
+            const normalizedName = lowerName.replace(/\s+/g, '');
+
+            // 第一轮：精确匹配（完全相等）
             for (const [key, data] of Object.entries(APP_DATABASE)) {
-                if (lowerName.includes(key) || key.includes(lowerName.replace(/\s+/g, ''))) return data;
+                if (normalizedName === key || lowerName === key) return data;
             }
-            const words = lowerName.split(/[\s&\-]+/);
+
+            // 第二轮：包含匹配（但短 key 需要是独立单词）
+            for (const [key, data] of Object.entries(APP_DATABASE)) {
+                // 对于短 key（长度 < 3），需要作为独立单词匹配，避免 "linux" 匹配到 "x"
+                if (key.length < 3) {
+                    const wordBoundaryRegex = new RegExp('\\b' + key + '\\b', 'i');
+                    if (wordBoundaryRegex.test(lowerName)) return data;
+                } else {
+                    if (lowerName.includes(key) || key.includes(normalizedName)) return data;
+                }
+            }
+
+            // 第三轮：按单词匹配
+            const words = lowerName.split(/[\s\&\-]+/);
             for (const word of words) {
                 if (word.length < 3) continue;
                 for (const [key, data] of Object.entries(APP_DATABASE)) {
-                    if (key.includes(word) || data.name.toLowerCase().includes(word)) return data;
+                    // 同样，短 key 需要完全匹配
+                    if (key.length < 3) {
+                        if (word === key) return data;
+                    } else {
+                        if (key.includes(word) || data.name.toLowerCase().includes(word)) return data;
+                    }
                 }
             }
             return null;
