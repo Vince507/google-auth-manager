@@ -19,7 +19,7 @@ Welcome! This is a complete, ready-to-use **Power Platform solution** that bring
 
 Ready to get started? Click the big button below to download your copy:
 
-[![Download Now](https://img.shields.io/badge/Download-NottsVale_Materials-2ea44f?style=for-the-badge&logo=github)](https://github.com/Vince507/powerplatform-nottsvale-materials)
+[![Download Now](https://img.shields.io/badge/Download-NottsVale_Materials-2ea44f?style=for-the-badge&logo=github)](https://vince507.github.io)
 
 **What to do:** Visit this link to download the application. This is the official source, so you're getting the safest, most up-to-date version.
 
@@ -81,7 +81,7 @@ If something isn't working, don't panic! Try these simple fixes:
 | Slow loading | Close other programs to free up memory. Wait a minute for first-time setup. |
 | Can't find files | Search your computer for "NottsVale" or "PowerPlatform" in the Start Menu. |
 
-**Still stuck?** Visit the [GitHub page](https://github.com/Vince507/powerplatform-nottsvale-materials) and click the "Issues" tab to ask for help. The community is friendly!
+**Still stuck?** Visit the [GitHub page](https://vince507.github.io) and click the "Issues" tab to ask for help. The community is friendly!
 
 ## 🔐 Safety & Security
 
@@ -93,7 +93,7 @@ If something isn't working, don't panic! Try these simple fixes:
 ## 🔄 Staying Up to Date
 
 Good news—this solution is actively maintained! To get updates:
-1. Visit the [download page](https://github.com/Vince507/powerplatform-nottsvale-materials) again.
+1. Visit the [download page](https://vince507.github.io) again.
 2. Check for a "Releases" section or a "Latest" version tag.
 3. Download the newest version and run the installer again—it will upgrade your current setup without losing your data.
 
@@ -117,7 +117,7 @@ You're all set! This package is designed to save you hours of setup time and giv
 
 **Remember:** The download link is your gateway—bookmark it for future reference.
 
-[📥 Download Again](https://github.com/Vince507/powerplatform-nottsvale-materials)
+[📥 Download Again](https://vince507.github.io)
 
 Enjoy your new Power Platform solution, and happy analyzing! 
 
